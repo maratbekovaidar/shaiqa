@@ -1,6 +1,13 @@
 
+import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:mic_stream/mic_stream.dart';
 import 'package:shaiqa/core/sound/sound_controller.dart';
+import 'package:shaiqa/core/sound/sound_stream_controller.dart';
+import 'package:shaiqa/utils/services/music_detect_service.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -11,26 +18,25 @@ class MainPage extends StatefulWidget {
 
 
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
 
-  /// Sound Controller
-  final _soundController = SoundController();
 
+
+  bool recording = false;
+  final MusicDetectService _musicDetectService = MusicDetectService();
+  SoundController soundController = SoundController();
+  SoundStreamController soundStreamController = SoundStreamController();
 
   @override
   void initState() {
     super.initState();
-    _soundController.init();
-
-    // _soundController.setSubscriptionDuration(0.01);
-    // _soundController.setDbPeakLevelUpdate(0.8);
-    // _soundController.setDbLevelEnabled(true);
+    soundController.init();
   }
 
 
   @override
   void dispose() {
-    _soundController.dispose();
+    soundController.dispose();
     super.dispose();
   }
 
@@ -45,22 +51,25 @@ class _MainPageState extends State<MainPage> {
             children: [
               GestureDetector(
                 onTap: () async {
-                  final isRecording = await _soundController.toggleRecording();
+                  // soundController.toggleRecording();
+                  soundStreamController.listen();
                   setState(() {
 
                   });
                 },
                 child: CircleAvatar(
-                  radius: 30,
-                  backgroundColor: _soundController.isRecording ? Colors.red[300] : Colors.black38,
+                  radius: 80,
+                  backgroundColor: soundController.isRecording ? Colors.red[300] : Colors.black38,
                   child: Icon(
                     Icons.mic_rounded,
-                    color: _soundController.isRecording ? Colors.red[700] : Colors.black87,
+                    size: 50,
+                    color: soundController.isRecording ? Colors.red[700] : Colors.black87,
                   ),
                 ),
               ),
             ],
-          )
+          ),
+
         ],
       ),
     );

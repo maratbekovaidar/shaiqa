@@ -1,17 +1,17 @@
 
-
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-const pathToSaveAudio = 'record_audio.mp4';
 
 class SoundController {
 
   FlutterSoundRecorder? _soundRecorder;
   bool _isRecorderInitialised = false;
+  StreamSink<Food>? toStream;
 
   bool get isRecording => _soundRecorder!.isRecording;
 
@@ -40,16 +40,26 @@ class SoundController {
   Future _record() async {
     if(!_isRecorderInitialised) return;
 
+
+
     debugPrint("Start recording");
-    await _soundRecorder!.startRecorder(toFile: pathToSaveAudio, codec: Codec.aacMP4);
+    await _soundRecorder!.startRecorder(
+      toFile: "recordedSound.mp4",
+      // codec: Codec.defaultCodec,
+      sampleRate: 44100,
+      // bitRate: 44100,
+      numChannels: 1
+    );
   }
 
   Future _stop() async {
     if(!_isRecorderInitialised) return;
-    await _soundRecorder!.stopRecorder().then((value) {
-      print(value);
-    });
-    debugPrint("End recording");
+    String? path = await _soundRecorder!.stopRecorder();
+    debugPrint("Path: " + path!);
+    // final bytes = File(path).readAsBytesSync();
+    // String img64 = base64Encode(bytes);
+    // debugPrint("End recording");
+    // debugPrint(img64);
   }
 
   Future toggleRecording() async {
