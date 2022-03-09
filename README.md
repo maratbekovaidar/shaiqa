@@ -1,2 +1,2 @@
 # shaiqa
-Mobile application like shazam
+Shaiqa with music
