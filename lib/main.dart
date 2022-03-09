@@ -10,10 +10,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Shaiqa',
       debugShowCheckedModeBanner: false,
-      home: MainPage()
+      theme: ThemeData(
+        backgroundColor: const Color(0xff0F3460),
+        scaffoldBackgroundColor: const Color(0xff0F3460),
+        snackBarTheme: const SnackBarThemeData(
+          backgroundColor: Color(0xff1A1A2E)
+        )
+      ),
+      home: const MainPage()
     );
   }
 }

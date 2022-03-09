@@ -2,19 +2,23 @@
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:mic_stream/mic_stream.dart';
-import 'package:shaiqa/constants/sounds/base64_sound.dart';
 import 'package:shaiqa/utils/services/music_detect_service.dart';
 
 class SoundStreamController {
 
   late StreamSubscription<List<int>> listener;
   MusicDetectService musicDetectService = MusicDetectService();
-  bool isRecord() => listener.isPaused;
+  bool recording = false;
+  bool get isRecord => recording;
 
-  Future listen() async {
+  Future<String> listen(BuildContext context) async {
+
+    recording = true;
+    /// Stream Init
     Stream<Uint8List>? stream = await MicStream.microphone(
       audioSource: AudioSource.DEFAULT,
       sampleRate: 44100,
@@ -22,34 +26,45 @@ class SoundStreamController {
       audioFormat: AudioFormat.ENCODING_PCM_16BIT
     );
 
-    String result = "";
-
+    /// List of bytes
     var soundBytes = BytesBuilder();
 
+    /// Listen stream
     listener = stream!.listen((samples) {
-      print(samples);
-      result += base64Encode(samples);
-      // print(base64Encode(samples));
       soundBytes.add(samples);
     });
 
+    Response? response;
 
-    Future.delayed(const Duration(seconds: 5), () {
+    /// After 5 seconds stop record
+    await Future.delayed(const Duration(seconds: 3), () async {
+
+      /// Stop
       listener.cancel();
-      print(result);
-      musicDetectService.detectSound(base64string: base64Encode(soundBytes.toBytes()));
+
+      /// Call request to detect service
+      response = await musicDetectService.detectSound(base64string: base64Encode(soundBytes.toBytes()));
+
     });
+
+    if(response!.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(response!.data['track']['subtitle'] + " - " + response!.data['track']['title']),
+      ));
+      recording = false;
+      return "success";
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Doesn't have result :("),
+      ));
+      recording = false;
+      return "false";
+    }
+
   }
 
+  /// Stop method
   Future stop() async {
     listener.cancel();
   }
-
-  Future fileListen() async {
-    File imagefile = File("sounds/sound.mp3"); //convert Path to File
-    Uint8List imagebytes = await imagefile.readAsBytes(); //convert to bytes
-    String base64string = base64.encode(imagebytes); //convert bytes to base64 string
-    print(base64string);
-  }
-
 }

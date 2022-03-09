@@ -1,12 +1,14 @@
 
-import 'dart:io';
+
+import 'dart:collection';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class MusicDetectService {
 
-  void detectSound({required String base64string}) async {
+  Future<Response> detectSound({required String base64string}) async {
     try {
       var response = await Dio().post(
         'https://shazam.p.rapidapi.com/songs/detect',
@@ -21,7 +23,10 @@ class MusicDetectService {
       );
 
       debugPrint("Http Status: " + response.statusCode.toString());
-      debugPrint("Body: " + response.data.toString());
+      print(response.data['track'] == null ? "null" : response.data['track']['hub']['actions'][1]['uri']);
+
+      // return response.statusCode == 200 ? true : false;
+      return response;
 
     } catch (e) {
       throw Exception(e);
