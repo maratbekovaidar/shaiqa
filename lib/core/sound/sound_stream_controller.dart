@@ -31,6 +31,7 @@ class SoundStreamController {
 
     /// Listen stream
     listener = stream!.listen((samples) {
+      print(samples);
       soundBytes.add(samples);
     });
 
@@ -47,9 +48,11 @@ class SoundStreamController {
 
     });
 
+
     if(response!.statusCode == 200) {
+      print(response!.data);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(response!.data['track']['subtitle'] + " - " + response!.data['track']['title']),
+        content: Text(response!.data['track'] == null ? "Not detect" : response!.data['track']['subtitle'] + " - " + response!.data['track']['title']),
       ));
       recording = false;
       return "success";
