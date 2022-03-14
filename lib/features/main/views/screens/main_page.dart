@@ -28,23 +28,36 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
 
   double radius = 80;
 
-  void changeRadius() async {
 
-      timer = Timer.periodic(const Duration(milliseconds: 10), (Timer t) {
-        setState(() {
-          radius = (random.nextInt(50) + 50).toDouble();
-        });
-      });
-  }
+  /// Animation controller
+  late AnimationController _controller;
+  late Animation<int> _decorationTween;
+
 
   @override
   void initState() {
     super.initState();
+
+    /// Animation controller init
+    _controller =
+        AnimationController(
+          lowerBound: 0.9,
+          upperBound: 1.0,
+          duration: const Duration(seconds: 1),
+          vsync: this
+        );
+    _controller.repeat(reverse: true);
+
+    _decorationTween = IntTween(
+      begin: 80,
+      end: 100
+    ).animate(_controller);
   }
 
 
   @override
   void dispose() {
+    _controller.dispose();
     super.dispose();
   }
 
@@ -94,10 +107,17 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
                     }
 
                   },
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 500),
+                  child: AnimatedBuilder(
+                    animation: _decorationTween,
+                    builder: (BuildContext _, child) {
+                      return Transform.scale(
+
+                        scale: _controller.value,
+                        child: child,
+                      );
+                    },
                     child: CircleAvatar(
-                      radius: radius,
+                      radius: _decorationTween.value.toDouble(),
                       backgroundColor: recording ? Colors.red : const Color(0xff1A1A2E),
                       child: Icon(
                         Icons.mic_rounded,
