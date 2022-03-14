@@ -2,6 +2,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:shaiqa/utils/models/music_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MusicPage extends StatefulWidget {
   const MusicPage({Key? key, required this.musicModel}) : super(key: key);
@@ -21,6 +22,12 @@ class _MusicPageState extends State<MusicPage> with SingleTickerProviderStateMix
 
   /// Animation controller
   late AnimationController _animationController;
+
+  /// Open Url or References
+  void _launchURL(String url) async {
+    if (!await launch(url)) throw 'Could not launch $url';
+  }
+
 
   @override
   void initState() {
@@ -204,29 +211,47 @@ class _MusicPageState extends State<MusicPage> with SingleTickerProviderStateMix
                 padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
+                  children: [
 
-                    SizedBox(width: 10),
-                    CircleAvatar(
-                      radius: 15,
-                      backgroundImage: AssetImage(
-                        "assets/icons/spotify.png"
+                    /// Spotify
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () {
+                        _launchURL(widget.musicModel.spotifyUri);
+                      },
+                      child: const CircleAvatar(
+                        radius: 15,
+                        backgroundImage: AssetImage(
+                          "assets/icons/spotify.png"
+                        ),
                       ),
                     ),
 
-                    SizedBox(width: 10),
-                    CircleAvatar(
-                      radius: 15,
-                      backgroundImage: AssetImage(
-                          "assets/icons/deezer.png"
+                    /// Deezer
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () {
+                        _launchURL(widget.musicModel.deezerUri);
+                      },
+                      child: const CircleAvatar(
+                        radius: 15,
+                        backgroundImage: AssetImage(
+                            "assets/icons/deezer.png"
+                        ),
                       ),
                     ),
 
-                    SizedBox(width: 10),
-                    CircleAvatar(
-                      radius: 15,
-                      backgroundImage: AssetImage(
-                          "assets/icons/shazam.png"
+                    /// Shazam
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () {
+                        _launchURL(widget.musicModel.shazamUri);
+                      },
+                      child: const CircleAvatar(
+                        radius: 15,
+                        backgroundImage: AssetImage(
+                            "assets/icons/shazam.png"
+                        ),
                       ),
                     ),
 
