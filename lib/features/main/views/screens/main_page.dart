@@ -25,13 +25,28 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
   Random random = Random();
   Timer? timer;
   MusicModel? musicModel;
-
   double radius = 80;
 
 
   /// Animation controller
   late AnimationController _controller;
   late Animation<int> _decorationTween;
+
+  /// Listening controller
+  void changeRadius() {
+    setState(() {
+      radius = 80.0 + random.nextInt(30);
+    });
+  }
+
+  void listeningStart() {
+    timer = Timer.periodic(const Duration(microseconds: 30000), (Timer t) => changeRadius());
+  }
+
+  void listeningStop() {
+    timer?.cancel();
+  }
+
 
 
   @override
@@ -75,11 +90,14 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
             children: [
               RippleAnimation(
                 repeat: true,
-                color: Colors.red,
+                color: const Color(0xff006466),
                 minRadius: recording ? 90 : 0,
                 ripplesCount: 6,
                 child: GestureDetector(
                   onTap: () async {
+
+                    _controller.stop();
+                    listeningStart();
                     setState(() {
                       recording = true;
                     });
@@ -97,6 +115,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
                       radius = 80;
                       recording = false;
                     });
+                    listeningStop();
+                    _controller.repeat(reverse: true);
 
                     if(musicModel != null) {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => MusicPage(musicModel: musicModel!)));
@@ -117,12 +137,12 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
                       );
                     },
                     child: CircleAvatar(
-                      radius: _decorationTween.value.toDouble(),
-                      backgroundColor: recording ? Colors.red : const Color(0xff1A1A2E),
+                      radius: radius,
+                      backgroundColor: recording ? const Color(0xff006466) : const Color(0xff1A1A2E),
                       child: Icon(
                         Icons.mic_rounded,
                         size: 50,
-                        color: recording ? Colors.pink : Colors.grey,
+                        color: recording ? Colors.white : Colors.grey,
                       ),
                     ),
                   ),
