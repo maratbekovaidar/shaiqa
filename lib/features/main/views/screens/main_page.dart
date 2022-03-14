@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:shaiqa/core/sound/sound_stream_controller.dart';
 import 'package:shaiqa/features/music/views/screens/music_page.dart';
 import 'package:shaiqa/utils/models/music_model.dart';
@@ -143,6 +144,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
                         _controller.repeat(reverse: true);
 
                         if(musicModel != null) {
+                          Vibrate.vibrate();
                           Navigator.of(context).push(_openMusicPage(musicModel!));
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
