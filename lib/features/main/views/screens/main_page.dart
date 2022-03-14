@@ -26,6 +26,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
   Timer? timer;
   MusicModel? musicModel;
   double radius = 90;
+  String title = "Tap to Listen";
 
 
   /// Animation controller
@@ -35,7 +36,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
   /// Listening controller
   void changeRadius() {
     setState(() {
-      radius = 90.0 + random.nextInt(30);
+      radius = 80.0 + random.nextInt(30);
     });
   }
 
@@ -79,78 +80,103 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      body: Stack(
         children: [
 
-
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Column(
             children: [
-              RippleAnimation(
-                repeat: true,
-                color: const Color(0xff006466),
-                minRadius: recording ? 90 : 0,
-                ripplesCount: 6,
-                child: GestureDetector(
-                  onTap: () async {
-
-                    _controller.stop();
-                    listeningStart();
-                    setState(() {
-                      recording = true;
-                    });
-
-                    try {
-                      musicModel = await soundStreamController.listen(context);
-                    } catch(e) {
-                      setState(() {
-                        radius = 80;
-                        recording = false;
-                      });
-                    }
-
-                    setState(() {
-                      radius = 80;
-                      recording = false;
-                    });
-                    listeningStop();
-                    _controller.repeat(reverse: true);
-
-                    if(musicModel != null) {
-                      Navigator.of(context).push(_openMusicPage(musicModel!));
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Doesn't have result :("),
-                      ));
-                    }
-
-                  },
-                  child: AnimatedBuilder(
-                    animation: _decorationTween,
-                    builder: (BuildContext _, child) {
-                      return Transform.scale(
-
-                        scale: _controller.value,
-                        child: child,
-                      );
-                    },
-                    child: CircleAvatar(
-                      radius: radius,
-                      backgroundColor: recording ? const Color(0xff006466) : const Color(0xff1A1A2E),
-                      child: Icon(
-                        Icons.mic_rounded,
-                        size: 50,
-                        color: recording ? Colors.white : Colors.grey,
-                      ),
+              const SizedBox(height: 150),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20
                     ),
                   ),
-                ),
+                ],
               ),
             ],
           ),
 
+          /// Listen Button
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+
+              /// Main Button
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  RippleAnimation(
+                    repeat: true,
+                    color: const Color(0xff006466),
+                    minRadius: recording ? 90 : 0,
+                    ripplesCount: 6,
+                    child: GestureDetector(
+                      onTap: () async {
+
+                        _controller.stop();
+                        listeningStart();
+                        setState(() {
+                          recording = true;
+                          title = "Listening...";
+                        });
+
+                        try {
+                          musicModel = await soundStreamController.listen(context);
+                        } catch(e) {
+                          setState(() {
+                            radius = 80;
+                            recording = false;
+                          });
+                        }
+
+                        setState(() {
+                          radius = 80;
+                          recording = false;
+                          title = "Tap to Listen";
+                        });
+                        listeningStop();
+                        _controller.repeat(reverse: true);
+
+                        if(musicModel != null) {
+                          Navigator.of(context).push(_openMusicPage(musicModel!));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text("Doesn't have result :("),
+                          ));
+                        }
+
+                      },
+                      child: AnimatedBuilder(
+                        animation: _decorationTween,
+                        builder: (BuildContext _, child) {
+                          return Transform.scale(
+
+                            scale: _controller.value,
+                            child: child,
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: radius,
+                          backgroundColor: recording ? const Color(0xff006466) : const Color(0xff1A1A2E),
+                          child: Icon(
+                            Icons.mic_rounded,
+                            size: 50,
+                            color: recording ? Colors.white : Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+            ],
+          ),
         ],
       ),
     );
