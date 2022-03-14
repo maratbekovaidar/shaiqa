@@ -25,7 +25,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
   Random random = Random();
   Timer? timer;
   MusicModel? musicModel;
-  double radius = 80;
+  double radius = 90;
 
 
   /// Animation controller
@@ -35,7 +35,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
   /// Listening controller
   void changeRadius() {
     setState(() {
-      radius = 80.0 + random.nextInt(30);
+      radius = 90.0 + random.nextInt(30);
     });
   }
 
@@ -57,7 +57,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
     _controller =
         AnimationController(
           lowerBound: 0.9,
-          upperBound: 1.0,
+          upperBound: 1.1,
           duration: const Duration(seconds: 1),
           vsync: this
         );
@@ -119,7 +119,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
                     _controller.repeat(reverse: true);
 
                     if(musicModel != null) {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => MusicPage(musicModel: musicModel!)));
+                      Navigator.of(context).push(_openMusicPage(musicModel!));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("Doesn't have result :("),
@@ -156,4 +156,22 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
     );
   }
 
+}
+
+Route _openMusicPage(MusicModel musicModel) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => MusicPage(musicModel: musicModel),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }
