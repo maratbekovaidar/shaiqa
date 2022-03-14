@@ -3,6 +3,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:shaiqa/core/sound/sound_stream_controller.dart';
+import 'package:shaiqa/features/music/views/screens/music_page.dart';
+import 'package:shaiqa/utils/models/music_model.dart';
 import 'package:simple_ripple_animation/simple_ripple_animation.dart';
 
 class MainPage extends StatefulWidget {
@@ -22,6 +24,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
   SoundStreamController soundStreamController = SoundStreamController();
   Random random = Random();
   Timer? timer;
+  MusicModel? musicModel;
 
   double radius = 80;
 
@@ -59,7 +62,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
             children: [
               RippleAnimation(
                 repeat: true,
-                color: Colors.black54,
+                color: Colors.red,
                 minRadius: recording ? 90 : 0,
                 ripplesCount: 6,
                 child: GestureDetector(
@@ -67,18 +70,29 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin  {
                     setState(() {
                       recording = true;
                     });
-                    changeRadius();
-                    String result = await soundStreamController.listen(context);
 
-                    if(result.isNotEmpty) {
+                    try {
+                      musicModel = await soundStreamController.listen(context);
+                    } catch(e) {
                       setState(() {
-                        timer!.cancel();
-                        print(timer!.isActive);
-                        print("ok");
                         radius = 80;
                         recording = false;
                       });
                     }
+
+                    setState(() {
+                      radius = 80;
+                      recording = false;
+                    });
+
+                    if(musicModel != null) {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => MusicPage(musicModel: musicModel!)));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Doesn't have result :("),
+                      ));
+                    }
+
                   },
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 500),

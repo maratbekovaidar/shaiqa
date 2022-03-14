@@ -1,14 +1,11 @@
 
 
-import 'dart:collection';
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:shaiqa/utils/models/music_model.dart';
 
 class MusicDetectService {
 
-  Future<Response> detectSound({required String base64string}) async {
+  Future<MusicModel?> detectSound({required String base64string}) async {
     try {
       var response = await Dio().post(
         'https://shazam.p.rapidapi.com/songs/detect',
@@ -22,11 +19,12 @@ class MusicDetectService {
         ),
       );
 
-      debugPrint("Http Status: " + response.statusCode.toString());
-      print(response.data['track'] == null ? "null" : response.data['track']['hub']['actions'][1]['uri']);
 
-      // return response.statusCode == 200 ? true : false;
-      return response;
+      if(response.data['track'] != null) {
+        return MusicModel.fromJson(response.data['track']);
+      } else {
+        return null;
+      }
 
     } catch (e) {
       throw Exception(e);

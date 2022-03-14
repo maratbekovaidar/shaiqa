@@ -1,5 +1,8 @@
+/// Music Model
+
 class MusicModel {
 
+  /// Parameters
   final String title;
   final String subtitle;
   final String backgroundImage;
@@ -16,6 +19,8 @@ class MusicModel {
   final String lyricsAuthor;
   final String videoUri;
 
+
+  /// Constructor
   MusicModel({
     required this.title,
     required this.subtitle,
@@ -33,26 +38,45 @@ class MusicModel {
     required this.lyricsAuthor,
     required this.videoUri});
 
+
+  /// Factory constructor from json
   factory MusicModel.fromJson(json) {
 
-    List<dynamic> lyricsJsonList = json['sections'][1]['text'];
+    /// Sound with lyrics i = 1 for 1 section of lyrics in section array
+    int i = 1;
+    List<dynamic> lyricsJsonList;
 
+    /// Condition for checking lyrics
+    if(json['sections'][1]['type'] == "LYRICS") {
+
+      /// If have lyrics init it
+      lyricsJsonList = json['sections'][1]['text'];
+    } else {
+
+      /// Else condition array index is -1
+      i = 0;
+
+      /// And lyrics is "Without Lyrics" sub comment
+      lyricsJsonList = ["Without lyrics"];
+    }
+
+    /// Constructor
     return MusicModel(
         title: json['title'],
         subtitle: json['subtitle'],
         backgroundImage: json['images']['background'],
         image: json['images']['coverart'],
         audioUri: json['hub']['actions'][1]['uri'],
-        spotifyUri: json['providers'][0]['actions'][0]['uri'],
-        deezerUri: json['providers'][1]['actions'][0]['uri'],
-        shazamUri: json['uri'],
+        spotifyUri: json['hub']['providers'][0]['actions'][0]['uri'],
+        deezerUri: json['hub']['providers'][1]['actions'][0]['uri'],
+        shazamUri: json['url'],
         genres: json['genres']['primary'],
         album: json['sections'][0]['metadata'][0]['text'],
         label: json['sections'][0]['metadata'][1]['text'],
         release: json['sections'][0]['metadata'][2]['text'],
         lyrics: lyricsJsonList.map((e) => e.toString()).toList(),
-        lyricsAuthor: json['sections'][1]['footer'],
-        videoUri: json['sections'][2]['youtubeurl']['actions']['uri']
+        lyricsAuthor: json['sections'][1]['footer'] ?? "",
+        videoUri: json['sections'][1 + i]['youtubeurl']['actions'][0]['uri']
     );
   }
 

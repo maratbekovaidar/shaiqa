@@ -9,6 +9,13 @@
             </list>
           </value>
         </entry>
+        <entry key="audioplayers">
+          <value>
+            <list>
+              <option value="D:/flutter/.pub-cache/hosted/pub.dartlang.org/audioplayers-0.20.1/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="bloc">
           <value>
             <list>
@@ -107,6 +114,13 @@
             </list>
           </value>
         </entry>
+        <entry key="flutter_inappwebview">
+          <value>
+            <list>
+              <option value="D:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_inappwebview-5.3.2/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="flutter_lints">
           <value>
             <list>
@@ -146,6 +160,13 @@
           <value>
             <list>
               <option value="D:/flutter/packages/flutter_web_plugins/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="http">
+          <value>
+            <list>
+              <option value="D:/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.13.4/lib" />
             </list>
           </value>
         </entry>
@@ -429,10 +450,18 @@
             </list>
           </value>
         </entry>
+        <entry key="youtube_player_flutter">
+          <value>
+            <list>
+              <option value="D:/flutter/.pub-cache/hosted/pub.dartlang.org/youtube_player_flutter-8.0.0/lib" />
+            </list>
+          </value>
+        </entry>
       </option>
     </properties>
     <CLASSES>
       <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.2/lib" />
+      <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/audioplayers-0.20.1/lib" />
       <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/bloc-8.0.3/lib" />
       <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0/lib" />
       <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.2.0/lib" />
@@ -446,10 +475,12 @@
       <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/ffi-1.1.2/lib" />
       <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.2/lib" />
       <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_bloc-8.0.1/lib" />
+      <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_inappwebview-5.3.2/lib" />
       <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-1.0.4/lib" />
       <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_sound-9.1.7/lib" />
       <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_sound_platform_interface-9.1.7/lib" />
       <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_sound_web-9.1.7/lib" />
+      <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.13.4/lib" />
       <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.0/lib" />
       <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/js-0.6.3/lib" />
       <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/lints-1.0.1/lib" />
@@ -489,6 +520,7 @@
       <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.1/lib" />
       <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/win32-2.4.1/lib" />
       <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/xdg_directories-0.2.0+1/lib" />
+      <root url="file://D:/flutter/.pub-cache/hosted/pub.dartlang.org/youtube_player_flutter-8.0.0/lib" />
       <root url="file://D:/flutter/bin/cache/pkg/sky_engine/lib" />
       <root url="file://D:/flutter/packages/flutter/lib" />
       <root url="file://D:/flutter/packages/flutter_test/lib" />

@@ -14,10 +14,14 @@ class MyApp extends StatelessWidget {
       title: 'Shaiqa',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        backgroundColor: const Color(0xff0F3460),
-        scaffoldBackgroundColor: const Color(0xff0F3460),
+        backgroundColor: const Color(0xff4d194d),
+        scaffoldBackgroundColor: const Color(0xff4d194d),
         snackBarTheme: const SnackBarThemeData(
-          backgroundColor: Color(0xff1A1A2E)
+          backgroundColor: Color(0xff4d194d)
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.transparent,
+          elevation: 0
         )
       ),
       home: const MainPage()
