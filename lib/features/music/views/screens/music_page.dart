@@ -12,19 +12,28 @@ class MusicPage extends StatefulWidget {
   State<MusicPage> createState() => _MusicPageState();
 }
 
-class _MusicPageState extends State<MusicPage> {
+class _MusicPageState extends State<MusicPage> with SingleTickerProviderStateMixin {
 
 
   /// Audio Controller
   AudioPlayer audioPlayer = AudioPlayer();
   bool isAudioPlaying = false;
 
+  /// Animation controller
+  late AnimationController _animationController;
+
   @override
   void initState() {
     super.initState();
+
+    /// Animated controller init
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 450));
+
+    /// Audio player init
     audioPlayer.play(widget.musicModel.audioUri);
     setState(() {
-      isAudioPlaying = audioPlayer.onPlayerCompletion.isBroadcast;
+      isAudioPlaying = true;
     });
   }
 
@@ -32,6 +41,7 @@ class _MusicPageState extends State<MusicPage> {
   @override
   void dispose() {
     audioPlayer.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -92,13 +102,15 @@ class _MusicPageState extends State<MusicPage> {
 
                     /// Play button
                     GestureDetector(
-                      onTap: audioPlayer.state.index.isEven ? () {
+                      onTap: isAudioPlaying ? () {
                         audioPlayer.pause();
+                        _animationController.forward();
                         setState(() {
                           isAudioPlaying = false;
                         });
                       } : () {
                         audioPlayer.resume();
+                        _animationController.reverse();
                         setState(() {
                           isAudioPlaying = true;
                         });
@@ -114,10 +126,13 @@ class _MusicPageState extends State<MusicPage> {
                             )
                           )
                         ),
-                        child: Icon(
-                          audioPlayer.state.index.isEven ? Icons.pause : Icons.play_arrow_sharp,
-                          color: Colors.white,
-                        ),
+                        child: Center(
+                          child: AnimatedIcon(
+                            icon: AnimatedIcons.pause_play,
+                            progress: _animationController,
+                            color: Colors.white,
+                          ),
+                        )
                       ),
                     )
                   ],
