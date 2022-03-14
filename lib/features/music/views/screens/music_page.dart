@@ -95,49 +95,145 @@ class _MusicPageState extends State<MusicPage> with SingleTickerProviderStateMix
             delegate: SliverChildListDelegate([
 
               /// Audio Player
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
-                    /// Play button
-                    GestureDetector(
-                      onTap: isAudioPlaying ? () {
-                        audioPlayer.pause();
-                        _animationController.forward();
-                        setState(() {
-                          isAudioPlaying = false;
-                        });
-                      } : () {
-                        audioPlayer.resume();
-                        _animationController.reverse();
-                        setState(() {
-                          isAudioPlaying = true;
-                        });
-                      },
-                      child: Container(
-                        width: 70,
-                        height: 70,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            image: NetworkImage(
-                              widget.musicModel.image
+                  /// Image and Play button
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Row(
+                      children: [
+
+                        /// Play button
+                        GestureDetector(
+                          onTap: isAudioPlaying ? () {
+                            audioPlayer.pause();
+                            _animationController.forward();
+                            setState(() {
+                              isAudioPlaying = false;
+                            });
+                          } : () {
+                            audioPlayer.resume();
+                            _animationController.reverse();
+                            setState(() {
+                              isAudioPlaying = true;
+                            });
+                          },
+                          child: Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  widget.musicModel.image
+                                )
+                              )
+                            ),
+                            child: Center(
+                              child: AnimatedIcon(
+                                icon: AnimatedIcons.pause_play,
+                                progress: _animationController,
+                                color: Colors.white,
+                                size: 30,
+                              ),
                             )
-                          )
-                        ),
-                        child: Center(
-                          child: AnimatedIcon(
-                            icon: AnimatedIcons.pause_play,
-                            progress: _animationController,
-                            color: Colors.white,
                           ),
                         )
+                      ],
+                    ),
+                  ),
+
+                  /// Music Information
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+
+                        /// Name of music
+                        Text(
+                          widget.musicModel.title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+
+                        /// Artist
+                        Text(
+                          "Artist: " + widget.musicModel.subtitle,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                          ),
+                        ),
+
+                        /// Album
+                        Text(
+                          "Album: " + widget.musicModel.album,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(height: 13),
+
+                        /// Release year
+                        Text(
+                          "Release: " + widget.musicModel.release,
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14,
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  )
+
+                ],
+              ),
+              
+              /// References
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: const [
+
+                    SizedBox(width: 10),
+                    CircleAvatar(
+                      radius: 15,
+                      backgroundImage: AssetImage(
+                        "assets/icons/spotify.png"
                       ),
-                    )
+                    ),
+
+                    SizedBox(width: 10),
+                    CircleAvatar(
+                      radius: 15,
+                      backgroundImage: AssetImage(
+                          "assets/icons/deezer.png"
+                      ),
+                    ),
+
+                    SizedBox(width: 10),
+                    CircleAvatar(
+                      radius: 15,
+                      backgroundImage: AssetImage(
+                          "assets/icons/shazam.png"
+                      ),
+                    ),
+
                   ],
                 ),
-              ),
+              )
+              
             ]),
           ),
 
