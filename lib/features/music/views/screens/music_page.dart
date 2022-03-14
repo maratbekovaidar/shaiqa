@@ -232,25 +232,67 @@ class _MusicPageState extends State<MusicPage> with SingleTickerProviderStateMix
 
                   ],
                 ),
-              )
-              
+              ),
             ]),
           ),
 
           /// Adaptive To Lyrics
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: SizedBox(
-              height: 40,
+              height: 70,
               child: Center(
-                child: Text(
-                  "Scroll to see Lyrics",
-                  style: TextStyle(
-                      color: Colors.white60
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      "Scroll to see Lyrics",
+                      style: TextStyle(
+                          color: Colors.white60
+                      ),
+                    ),
+                    Icon(
+                      Icons.keyboard_arrow_up_rounded,
+                      color: Colors.white,
+                    )
+                  ],
                 ),
               ),
             ),
           ),
+
+          /// Lyrics
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    widget.musicModel.lyrics[index],
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                );
+              },
+              childCount: widget.musicModel.lyrics.length
+            )
+          ),
+
+          /// Footer
+          SliverList(delegate: SliverChildListDelegate([
+            Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Text(
+                widget.musicModel.lyricsAuthor,
+                style: const TextStyle(
+                  color: Colors.white70
+                ),
+              ),
+            )
+          ]))
+
 
         ],
       )
