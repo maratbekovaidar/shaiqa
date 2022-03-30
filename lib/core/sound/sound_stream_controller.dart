@@ -1,5 +1,3 @@
-
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
@@ -31,6 +29,7 @@ class SoundStreamController {
 
     /// Listen stream
     listener = stream!.listen((samples) {
+      print(samples);
       soundBytes.add(samples);
     });
 
